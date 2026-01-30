@@ -92,14 +92,22 @@ if not os.path.exists("model.pkl"):
 
 ## 📂 Project Structure
 
-    housing-ml/
+    House-Price-Prediction/
     │
-    ├── housing.csv
-    ├── input.csv
-    ├── main.py
-    ├── model.pkl
-    ├── requirements.txt
+    ├── .gitignore
     ├── README.md
+    ├── main.py
+    │
+    ├── data/
+    │   ├── housing.csv
+    │   └── input.csv
+    │
+    ├── output/
+    │   └── output.csv
+    │
+    └── archive/
+        └── main-old.py
+
 
 ------------------------------------------------------------------------
 
