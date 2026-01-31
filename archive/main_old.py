@@ -8,7 +8,7 @@ from sklearn.preprocessing import StandardScaler, OneHotEncoder
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import root_mean_squared_error
+from sklearn.metrics import root_mean_squared_error, r2_score
 from sklearn.model_selection import cross_val_score
 
 # 1. Load the dataset
@@ -66,6 +66,19 @@ print(housing_prepared.shape)
 # Linear Regression Model
 lin_reg = LinearRegression()
 lin_reg.fit(housing_prepared, housing_labels)
+
+# ...........................................................
+
+X_test = strat_test_set.drop("median_house_value", axis=1)
+y_test = strat_test_set["median_house_value"].copy()
+X_test_prepared = full_pipeline.transform(X_test)
+
+lin_test_preds = lin_reg.predict(X_test_prepared)
+lin_r2 = r2_score(y_test, lin_test_preds)
+print("Linear Regression R2 Score:", lin_r2)
+
+# ...........................................................
+
 lin_preds = lin_reg.predict(housing_prepared)
 lin_rmse = root_mean_squared_error(housing_labels, lin_preds)
 # print(f"The root mean squared error for Linear Regression is {lin_rmse}")
@@ -77,6 +90,15 @@ print(pd.Series(lin_rmses).describe())
 # Decision Tree Model
 dec_reg = DecisionTreeRegressor()
 dec_reg.fit(housing_prepared, housing_labels)
+
+# ............................................................
+
+dec_test_preds = dec_reg.predict(X_test_prepared)
+dec_r2 = r2_score(y_test, dec_test_preds)
+print("Decision Tree R2 Score:", dec_r2)
+
+# ............................................................
+
 dec_preds = dec_reg.predict(housing_prepared)
 # dec_rmse = root_mean_squared_error(housing_labels, dec_preds)
 dec_rmses = -cross_val_score(dec_reg, housing_prepared, housing_labels, scoring="neg_root_mean_squared_error", cv=10
@@ -87,6 +109,14 @@ print(pd.Series(dec_rmses).describe())
 # Random Forest Model
 random_forest_reg = RandomForestRegressor()
 random_forest_reg.fit(housing_prepared, housing_labels)
+
+# ............................................................
+
+rf_test_preds = random_forest_reg.predict(X_test_prepared)
+rf_r2 = r2_score(y_test, rf_test_preds)
+print("Random Forest R2 Score:", rf_r2)
+
+# ............................................................
 random_forest_preds = random_forest_reg.predict(housing_prepared)
 random_forest_rmse = root_mean_squared_error(housing_labels, random_forest_preds)
 # print(f"The root mean squared error for Random Forest is {random_forest_rmse}")
@@ -94,3 +124,6 @@ random_forest_rmses = -cross_val_score(random_forest_reg, housing_prepared, hous
                              )
 # print(f"The root mean squared error for Decision Tree is {dec_rmses}")
 print(pd.Series(random_forest_rmses).describe())
+
+
+# ...........................................................
